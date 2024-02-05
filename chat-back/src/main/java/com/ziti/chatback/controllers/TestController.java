@@ -1,4 +1,4 @@
-package com.ziti.chatback;
+package com.ziti.chatback.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,6 +8,6 @@ public class TestController {
 
     @RequestMapping("/ping")
     public String ping() {
-        return "Pong";
+        return "pong";
     }
 }
