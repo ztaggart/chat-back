@@ -17,6 +17,7 @@ public class Message {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(columnDefinition = "text")
     private String message;
 
     private Timestamp time;

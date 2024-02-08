@@ -15,17 +15,11 @@ public class MessageDto {
 
     }
 
-//    @Deprecated
-//    public MessageDto(String message, String from, String time) {
-//        this.message = message;
-//        this.from = from;
-//        this.time = time;
-//    }
-
     public MessageDto(String message, String from, String time, long id) {
         this.message = message;
         this.from = from;
         this.time = time;
+        this.id = id;
     }
 
     public String getMessage() {

@@ -54,6 +54,7 @@ public class AuthenticationService {
 
     public LoginResponseDto login(String username, String password) {
         try {
+            System.out.println("logging in");
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateJwt(auth);

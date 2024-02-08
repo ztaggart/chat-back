@@ -55,7 +55,9 @@ public class ChatController {
                     )                                      // Returns a `ZonedDateTime`. `toString` → 2018-05-12T16:30-04:00[America/Toronto].
                     .toInstant();                           // Extract a `Instant` object, always in UTC by definition.
             Message message = new Message(user, messageDto.getMessage(), Timestamp.from(instant));
+            System.out.println(message.getId());
             Message savedMessage = messageRepository.save(message);
+            System.out.println(savedMessage.getId());
             return new MessageDto(HtmlUtils.htmlEscape(savedMessage.getMessage()), savedMessage.getUser().getUsername(), savedMessage.getTime().toString(), savedMessage.getId());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Message malformed.");
