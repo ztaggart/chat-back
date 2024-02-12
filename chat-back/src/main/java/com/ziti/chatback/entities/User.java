@@ -28,6 +28,13 @@ public class User implements UserDetails {
     )
     private Set<Role> authorities;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_conversation_junction",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "conversation_id")}
+    )
+    private Set<Conversation> conversations;
+
     public User() {
         super();
         this.authorities = new HashSet<>();

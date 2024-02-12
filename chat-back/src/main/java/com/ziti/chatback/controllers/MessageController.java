@@ -32,7 +32,7 @@ public class MessageController {
             user.setUserId(userId.get());
             return messageRepository.findMessagesByUser(user)
                     .stream()
-                    .map(message -> new MessageDto(message.getMessage(), message.getUser().getUsername(), message.getTime().toString(), message.getId()))
+                    .map(message -> new MessageDto(message.getMessage(), message.getUser().getUsername(), message.getTime().toString(), message.getId(), message.getConversation().getId()))
                     .toList();
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A userId must be present.");
@@ -43,7 +43,7 @@ public class MessageController {
     @CrossOrigin(origins = "http://localhost:3000")
     public List<MessageDto> getAllMessages() {
         return messageRepository.findAll().stream()
-                .map(message -> new MessageDto(message.getMessage(), message.getUser().getUsername(), message.getTime().toString(), message.getId())).toList();
+                .map(message -> new MessageDto(message.getMessage(), message.getUser().getUsername(), message.getTime().toString(), message.getId(), message.getConversation().getId())).toList();
     }
 
 //    @PostMapping("/message")

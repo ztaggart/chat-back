@@ -1,8 +1,10 @@
 package com.ziti.chatback.controllers;
 
 import com.ziti.chatback.dtos.MessageDto;
+import com.ziti.chatback.entities.Conversation;
 import com.ziti.chatback.entities.Message;
 import com.ziti.chatback.entities.User;
+import com.ziti.chatback.repositories.ConversationRepository;
 import com.ziti.chatback.repositories.MessageRepository;
 import com.ziti.chatback.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +28,30 @@ import java.util.Optional;
 public class ChatController {
     private final UserRepository userRepository;
     private final MessageRepository messageRepository;
+    private final ConversationRepository conversationRepository;
 
     @Autowired
-    public ChatController(UserRepository userRepository, MessageRepository messageRepository) {
-
+    public ChatController(UserRepository userRepository, MessageRepository messageRepository, ConversationRepository conversationRepository) {
         this.userRepository = userRepository;
         this.messageRepository = messageRepository;
+        this.conversationRepository = conversationRepository;
     }
 
     @MessageMapping("/chat")
     @SendTo("/chatroom/public")
     public MessageDto getMessage(@RequestBody Optional<MessageDto> optionalMessageDto) {
+        System.out.println("chatting");
         if (optionalMessageDto.isPresent()) {
             MessageDto messageDto = optionalMessageDto.get();
             User user = userRepository.findUserByUsername(messageDto.getFrom())
                     .orElseThrow(() ->
                             new ResponseStatusException(HttpStatus.BAD_REQUEST,
                                     "The given username was not found."));
+
+            Conversation conversation = conversationRepository.findById(messageDto.getConversationId()).orElseThrow(() ->
+                    new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "The given conversation was not found."));
+
             //2023-11-14T21:17:13.080Z
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
             Instant instant =
@@ -54,11 +63,12 @@ public class ChatController {
                             ZoneId.of("America/New_York")  // Always specify a proper time zone with `Contintent/Region` format, never a 3-4 letter pseudo-zone such as `PST`, `CST`, or `IST`.
                     )                                      // Returns a `ZonedDateTime`. `toString` → 2018-05-12T16:30-04:00[America/Toronto].
                     .toInstant();                           // Extract a `Instant` object, always in UTC by definition.
-            Message message = new Message(user, messageDto.getMessage(), Timestamp.from(instant));
-            System.out.println(message.getId());
+            Message message = new Message(user, messageDto.getMessage(), conversation, Timestamp.from(instant));
+            System.out.println("message");
+            System.out.println(message.getMessage());
             Message savedMessage = messageRepository.save(message);
             System.out.println(savedMessage.getId());
-            return new MessageDto(HtmlUtils.htmlEscape(savedMessage.getMessage()), savedMessage.getUser().getUsername(), savedMessage.getTime().toString(), savedMessage.getId());
+            return new MessageDto(HtmlUtils.htmlEscape(savedMessage.getMessage()), savedMessage.getUser().getUsername(), savedMessage.getTime().toString(), savedMessage.getId(), savedMessage.getConversation().getId());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Message malformed.");
         }

@@ -17,6 +17,10 @@ public class Message {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "conversation_id", nullable = false)
+    private Conversation conversation;
+
     @Column(columnDefinition = "text")
     private String message;
 
@@ -31,9 +35,10 @@ public class Message {
         this.message = message;
     }
 
-    public Message(User user, String message, Timestamp time) {
+    public Message(User user, String message, Conversation conversation, Timestamp time) {
         this.user = user;
         this.message = message;
+        this.conversation = conversation;
         this.time = time;
     }
 
@@ -68,4 +73,7 @@ public class Message {
     public void setTime(Timestamp time) {
         this.time = time;
     }
+
+    public Conversation getConversation() {return this.conversation; }
+    public void setConversation(Conversation conversation) {this.conversation = conversation;}
 }

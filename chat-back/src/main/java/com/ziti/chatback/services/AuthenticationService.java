@@ -54,11 +54,11 @@ public class AuthenticationService {
 
     public LoginResponseDto login(String username, String password) {
         try {
-            System.out.println("logging in");
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateJwt(auth);
             Optional<User> user = userRepository.findUserByUsername(username);
+            System.out.println("logged in user id: " + user.get().getUserId());
             return user.map(value -> new LoginResponseDto(username, token, value.getUserId()))
                     .orElseThrow(() -> new IllegalStateException(username + "does not have an id."));
         } catch (AuthenticationException e) {

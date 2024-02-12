@@ -69,11 +69,12 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/auth/**").permitAll()
-                            .requestMatchers("/chat").permitAll()
-                            .requestMatchers("/chat/**").permitAll()
                             .requestMatchers("/error").permitAll()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
-                            .requestMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+//                            .requestMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+//                            .requestMatchers("/chat").hasAnyRole("ADMIN", "USER")
+                            .requestMatchers("/chat/**").permitAll()
+//                            .requestMatchers("/chat/**").hasAnyRole("ADMIN", "USER")
                             .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(
