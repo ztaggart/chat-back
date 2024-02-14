@@ -1,5 +1,6 @@
 package com.ziti.chatback.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +29,7 @@ public class User implements UserDetails {
     )
     private Set<Role> authorities;
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_conversation_junction",
             joinColumns = {@JoinColumn(name = "user_id")},
