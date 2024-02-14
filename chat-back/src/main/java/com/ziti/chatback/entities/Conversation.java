@@ -1,5 +1,6 @@
 package com.ziti.chatback.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -12,6 +13,7 @@ public class Conversation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_conversation_junction",
             joinColumns = {@JoinColumn(name = "conversation_id")},
