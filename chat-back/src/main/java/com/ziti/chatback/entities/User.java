@@ -1,6 +1,9 @@
 package com.ziti.chatback.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +12,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "userId")
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -29,7 +35,7 @@ public class User implements UserDetails {
     )
     private Set<Role> authorities;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_conversation_junction",
             joinColumns = {@JoinColumn(name = "user_id")},
