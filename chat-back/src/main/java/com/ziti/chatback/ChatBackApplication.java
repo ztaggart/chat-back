@@ -1,9 +1,11 @@
 package com.ziti.chatback;
 
 import com.ziti.chatback.entities.Conversation;
+import com.ziti.chatback.entities.Message;
 import com.ziti.chatback.entities.Role;
 import com.ziti.chatback.entities.User;
 import com.ziti.chatback.repositories.ConversationRepository;
+import com.ziti.chatback.repositories.MessageRepository;
 import com.ziti.chatback.repositories.RoleRepository;
 import com.ziti.chatback.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +31,7 @@ public class ChatBackApplication {
 	}
 
 	@Bean
-	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, ConversationRepository conversationRepository) {
+	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, ConversationRepository conversationRepository, MessageRepository messageRepository) {
 		return args -> {
 			if (roleRepository.findRoleByAuthority("ADMIN").isPresent()) {
 				return;
@@ -52,6 +56,9 @@ public class ChatBackApplication {
 
 			Conversation conversation =  new Conversation(users);
 			conversationRepository.save(conversation);
+
+			Message message = new Message(admin, "hello", conversation, Timestamp.from(Instant.now()));
+			messageRepository.save(message);
 		};
 	}
 

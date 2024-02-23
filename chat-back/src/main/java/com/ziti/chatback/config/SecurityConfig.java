@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = false)
 public class SecurityConfig {
 
     private final RSAKeyProperties keys;

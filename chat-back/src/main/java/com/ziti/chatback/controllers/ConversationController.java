@@ -1,5 +1,6 @@
 package com.ziti.chatback.controllers;
 
+import com.ziti.chatback.dtos.ConversationDto;
 import com.ziti.chatback.entities.Conversation;
 import com.ziti.chatback.services.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class ConversationController {
     }
 
     @GetMapping(value = "/conversations/{userId}")
-    public List<Conversation> getAllConversationsForUser(@PathVariable int userId) {
-        return conversationService.getAllConversations(userId);
+    public List<ConversationDto> getAllConversationsForUser(@PathVariable int userId) {
+        return conversationService.getAllConversations(userId).stream().map(ConversationDto::new).toList();
     }
 }
